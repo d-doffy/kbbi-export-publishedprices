@@ -6,11 +6,12 @@ using System.Globalization;
 using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
+using static System.DateTime;
 
 var dic = new Dictionary<string, Action<string>>()
 {
     { "-S", dataSource => AppSettings.DataSource = dataSource },
-    { "-U", userName =>  AppSettings.UserID = userName},
+    { "-U", userName =>  AppSettings.UserId = userName},
     { "-P", password => AppSettings.Password = password },
     { "-d", catalog => AppSettings.Catalog = catalog }
 };
@@ -37,7 +38,7 @@ public static class AppSettings
     
     public static string Catalog = "";
     
-    public static string UserID = "";
+    public static string UserId = "";
     
     public static string Password = "";
 }
@@ -72,7 +73,7 @@ public class PublishedPrices
     {
     }
 
-    public PublishedPrices(SqlDataReader dr)
+    public PublishedPrices(IDataRecord? dr)
     {
         if (dr == null)
         {
@@ -89,9 +90,10 @@ public class PublishedPrices
 
         if (dr["AV_Forecast_Date"] != DBNull.Value)
         {
-            DateTime.TryParse(dr["AV_Forecast_Date"] + string.Empty, out DateTime _AV_Forecast_Date);
-            if (_AV_Forecast_Date > DateTime.MinValue)
+            if (TryParse(dr["AV_Forecast_Date"] + string.Empty, out DateTime _AV_Forecast_Date))
+            {
                 AV_Forecast_Date = _AV_Forecast_Date.ToString("yyyy-MM-dd HH:mm:ss");
+            }
         }
 
         if (dr["AV_Typical_Mileage"] != DBNull.Value)
@@ -114,9 +116,10 @@ public class PublishedPrices
 
         if (dr["TA_Forecast_Date"] != DBNull.Value)
         {
-            DateTime.TryParse(dr["TA_Forecast_Date"] + string.Empty, out DateTime _TA_Forecast_Date);
-            if (_TA_Forecast_Date > DateTime.MinValue)
+            if (TryParse(dr["TA_Forecast_Date"] + string.Empty, out DateTime _TA_Forecast_Date))
+            {
                 TA_Forecast_Date = _TA_Forecast_Date.ToString("yyyy-MM-dd HH:mm:ss");
+            }
         }
 
         if (dr["TA_Typicale_Mileage"] != DBNull.Value)
@@ -145,16 +148,18 @@ public class PublishedPrices
 
         if (dr["Published_Date"] != DBNull.Value)
         {
-            DateTime.TryParse(dr["Published_Date"] + string.Empty, out DateTime _Published_Date);
-            if (_Published_Date > DateTime.MinValue)
+            if (TryParse(dr["Published_Date"] + string.Empty, out DateTime _Published_Date))
+            {
                 Published_Date = _Published_Date.ToString("yyyy-MM-dd HH:mm:ss");
+            }
         }
 
         if (dr["Created_Date"] != DBNull.Value)
         {
-            DateTime.TryParse(dr["Created_Date"] + string.Empty, out DateTime _Created_Date);
-            if (_Created_Date > DateTime.MinValue)
+            if (TryParse(dr["Created_Date"] + string.Empty, out DateTime _Created_Date))
+            {
                 Created_Date = _Created_Date.ToString("yyyy-MM-dd HH:mm:ss");
+            }
         }
 
         if (dr["IsFullPublish"] != DBNull.Value)
@@ -163,7 +168,7 @@ public class PublishedPrices
 
     public static string GeneratePublishedPrices()
     {
-        var fileNameDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+        var fileNameDate = UtcNow.ToString("yyyyMMddHHmmss");
         var fileName = $"PublishedPrices_{fileNameDate}_en-CA_processed.csv";
 
 
@@ -186,7 +191,7 @@ public class PublishedPrices
         {
             DataSource = AppSettings.DataSource,
             InitialCatalog = AppSettings.Catalog,
-            UserID = AppSettings.UserID,
+            UserID = AppSettings.UserId,
             Password = AppSettings.Password
         };
 
