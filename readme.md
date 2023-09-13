@@ -3,19 +3,15 @@
 # How to use:
 ### Linux
 ---
-1. Run ./linux.sh to build and publish an artifact 
-2. Into folder named ****publish* "export.publish.prices" using cli
-3. 
-    -S "Data Source"
-    -U "User Name"
-    -P "Password"
-    -d "Catalog"
+1. Run **./linux.sh** to build and publish an artifact 
+2. Into folder named **publish** "export.publish.prices" using cli
+3. >./export.publish.prices -S "Data Source" -U "User Name" -P "Password" -d "Catalog"
 
--****example*:
-    ./export.publish.prices -S "server name" -U "user id" -P "password" -d
-    "KBBVIMS"
+- **example**:
+    `./export.publish.prices -S "server name" -U "user id" -P "password" -d
+    "KBBVIMS"`
 
-4. You are receving the result in the same folder
+4. You are receiving the result in the same folder
 
 ### Good luck
 
